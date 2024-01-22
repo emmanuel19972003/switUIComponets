@@ -8,6 +8,10 @@
 import SwiftUI
 import Combine
 
+public protocol triggerActionProtocol {
+    func didTap()
+}
+
 public class switchDayNigthViewModel: ObservableObject {
     @Published public var isSelected: Bool = false
     
@@ -22,10 +26,14 @@ public class switchDayNigthViewModel: ObservableObject {
 public struct switchDayNigth: View {
     @ObservedObject public var vm: switchDayNigthViewModel
     let size: CGFloat
+    public var delegate: triggerActionProtocol?
     
-    public init(vm: switchDayNigthViewModel, size: CGFloat) {
+    public init(vm: switchDayNigthViewModel, 
+                size: CGFloat,
+                delegate: triggerActionProtocol? = nil) {
         self.vm = vm
         self.size = size
+        self.delegate = delegate
     }
     
     private let nightColor = Color(red: 32/255, green: 62/255, blue: 120/255)
@@ -69,6 +77,7 @@ public struct switchDayNigth: View {
         }
         .onTapGesture {
             vm.isSelected.toggle()
+            delegate?.didTap()
         }
     }
 }
